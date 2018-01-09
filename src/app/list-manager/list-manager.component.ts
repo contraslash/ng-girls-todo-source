@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoListService } from '../todo-list.service';
+import { TodoListStorageService } from '../todo-list-storage.service';
+
 @Component({
   selector: 'todo-list-manager',
   template: `
@@ -21,21 +23,21 @@ import { TodoListService } from '../todo-list.service';
 })
 export class ListManagerComponent implements OnInit {
   todoList = [];
-  constructor(private todoListService:TodoListService) { }
+  constructor(private storage:TodoListStorageService) { }
 
   ngOnInit() {
-    this.todoList = this.todoListService.getTodoList();
+    this.todoList = this.storage.get();
   }
 
   title = 'todo works';
 
 
-  addItem(item): void { 
-    this.todoListService.addItem(item); 
-  } 
+  addItem(title: string) {
+    this.todoList = this.storage.post({ title:title });
+  }
 
   removeItem(item) {
-    this.todoList = this.todoListService.removeItem(item);
+    this.todoList = this.storage.destroy(item);
   }
 
 }
